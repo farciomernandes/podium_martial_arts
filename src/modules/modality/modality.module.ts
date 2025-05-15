@@ -10,6 +10,7 @@ import { DeleteModalityUseCase } from '@modules/modality/usecases/delete-modalit
 import { ModalityRepository } from '@infra/typeorm/repositories/modality.repository';
 import { ModalityController } from './modality.controller';
 import { ModalityProvider } from './providers/modality.provider';
+import { GetModalityScheduleByIdModalityUseCase } from './usecases/get-modality-schedule-by-modality-id.usecase';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Modality])],
@@ -19,6 +20,12 @@ import { ModalityProvider } from './providers/modality.provider';
       provide: GetAllModalitiesUseCase,
       useFactory: (modalityRepository: ModalityRepository) =>
         new GetAllModalitiesUseCase(modalityRepository),
+      inject: [ModalityRepository],
+    },
+    {
+      provide: GetModalityScheduleByIdModalityUseCase,
+      useFactory: (modalityRepository: ModalityRepository) =>
+        new GetModalityScheduleByIdModalityUseCase(modalityRepository),
       inject: [ModalityRepository],
     },
     {
@@ -53,6 +60,7 @@ import { ModalityProvider } from './providers/modality.provider';
         createModalityUseCase: CreateModalityUseCase,
         updateModalityUseCase: UpdateModalityUseCase,
         deleteModalityUseCase: DeleteModalityUseCase,
+        getModalityScheduleByIdModalityUseCase: GetModalityScheduleByIdModalityUseCase,
       ) =>
         new ModalityProvider(
           getAllModalitiesUseCase,
@@ -60,6 +68,7 @@ import { ModalityProvider } from './providers/modality.provider';
           createModalityUseCase,
           updateModalityUseCase,
           deleteModalityUseCase,
+          getModalityScheduleByIdModalityUseCase,
         ),
       inject: [
         GetAllModalitiesUseCase,
@@ -67,6 +76,7 @@ import { ModalityProvider } from './providers/modality.provider';
         CreateModalityUseCase,
         UpdateModalityUseCase,
         DeleteModalityUseCase,
+        GetModalityScheduleByIdModalityUseCase,
       ],
     },
   ],

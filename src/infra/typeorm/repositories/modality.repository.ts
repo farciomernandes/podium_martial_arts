@@ -13,6 +13,6 @@ export class ModalityRepository extends Repository<Modality> {
   }
 
   async findByName(name: string): Promise<Modality | null> {
-    return this.findOne({ where: { name } });
+    return this.findOne({ where: { name }, relations: ['modality_schedule'] });
   }
 }

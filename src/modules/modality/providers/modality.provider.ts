@@ -4,8 +4,12 @@ import { GetModalityByIdUseCase } from '@modules/modality/usecases/get-modality-
 import { CreateModalityUseCase } from '@modules/modality/usecases/create-modality.usecase';
 import { UpdateModalityUseCase } from '@modules/modality/usecases/update-modality.usecase';
 import { DeleteModalityUseCase } from '@modules/modality/usecases/delete-modality.usecase';
-import { CreateModalityDto, UpdateModalityDto } from '@modules/modality/dtos/modality.dto';
+import {
+  CreateModalityDto,
+  UpdateModalityDto,
+} from '@modules/modality/dtos/modality.dto';
 import { Modality } from '@modules/modality/entities/modality.entity';
+import { GetModalityScheduleByIdModalityUseCase } from '../usecases/get-modality-schedule-by-modality-id.usecase';
 
 @Injectable()
 export class ModalityProvider {
@@ -15,6 +19,7 @@ export class ModalityProvider {
     private readonly createModalityUseCase: CreateModalityUseCase,
     private readonly updateModalityUseCase: UpdateModalityUseCase,
     private readonly deleteModalityUseCase: DeleteModalityUseCase,
+    private readonly getModalityScheduleByIdModalityUseCase: GetModalityScheduleByIdModalityUseCase,
   ) {}
 
   async getAllModalities(): Promise<Modality[]> {
@@ -23,6 +28,10 @@ export class ModalityProvider {
 
   async getModalityById(id: string): Promise<Modality> {
     return this.getModalityByIdUseCase.execute(id);
+  }
+
+  async getModalityScheduleByIdModality(id: string): Promise<Modality> {
+    return this.getModalityScheduleByIdModalityUseCase.execute(id);
   }
 
   async createModality(dto: CreateModalityDto): Promise<Modality> {

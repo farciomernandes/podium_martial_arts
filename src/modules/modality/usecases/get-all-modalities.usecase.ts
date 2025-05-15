@@ -6,16 +6,16 @@ import { ModalityRepository } from '@infra/typeorm/repositories/modality.reposit
 export class GetAllModalitiesUseCase {
   private readonly logger: Logger = new Logger(this.constructor.name);
 
-  constructor(
-    private readonly modalityRepository: ModalityRepository,
-  ) {}
+  constructor(private readonly modalityRepository: ModalityRepository) {}
 
   async execute(): Promise<Modality[]> {
     this.logger.log('Fetching all modalities');
-    
-    const modalities = await this.modalityRepository.find();
+
+    const modalities = await this.modalityRepository.find({
+      relations: ['modality_schedule'],
+    });
     this.logger.log(`Found ${modalities.length} modalities`);
-    
+
     return modalities;
   }
 }

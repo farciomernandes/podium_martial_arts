@@ -1,6 +1,19 @@
-import { Controller, Post, Body, Get, Param, Put, Delete, HttpStatus, HttpCode } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Get,
+  Param,
+  Put,
+  Delete,
+  HttpStatus,
+  HttpCode,
+} from '@nestjs/common';
 import { ApiBody, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { CreateModalityDto, UpdateModalityDto } from '@modules/modality/dtos/modality.dto';
+import {
+  CreateModalityDto,
+  UpdateModalityDto,
+} from '@modules/modality/dtos/modality.dto';
 import { Modality } from '@modules/modality/entities/modality.entity';
 import { ModalityProvider } from './providers/modality.provider';
 
@@ -25,6 +38,16 @@ export class ModalityController {
     return this.modalityProvider.getModalityById(id);
   }
 
+  @Get('schedules/by-id/:id')
+  @ApiOperation({ summary: 'Get a modality by ID with schedules' })
+  @ApiOkResponse({ description: 'Modality details with dates', type: Modality })
+  @HttpCode(HttpStatus.OK)
+  async getModalityWithScheduleById(
+    @Param('id') id: string,
+  ): Promise<Modality> {
+    return this.modalityProvider.getModalityScheduleByIdModality(id);
+  }
+
   @Post()
   @ApiOperation({ summary: 'Create a modality' })
   @ApiBody({ type: CreateModalityDto, description: 'Modality data' })
@@ -39,7 +62,10 @@ export class ModalityController {
   @ApiBody({ type: UpdateModalityDto, description: 'Modality data to update' })
   @ApiOkResponse({ description: 'Updated modality', type: Modality })
   @HttpCode(HttpStatus.OK)
-  async updateModality(@Param('id') id: string, @Body() dto: UpdateModalityDto): Promise<Modality> {
+  async updateModality(
+    @Param('id') id: string,
+    @Body() dto: UpdateModalityDto,
+  ): Promise<Modality> {
     return this.modalityProvider.updateModality(id, dto);
   }
 
