@@ -31,34 +31,12 @@ export class GenerateSampleDataUseCase {
           name: 'Marcio Fernandes',
           email: 'marcio@example.com',
           phone: '(11) 91234-5678',
-          plan: 'Mensal',
+          plan: 'Monthly',
           modality: 'Jiu-Jitsu',
           start_date: '2025-05-01',
-          dueDate: '2025-06-01',
-          valorPlan: 150.0,
-          paymentStatus: 'Pago',
-        },
-        {
-          name: 'Eriky Ryan',
-          email: 'eriky@example.com',
-          phone: '(11) 92345-6789',
-          plan: 'Trimonthtral',
-          modality: 'Muay Thai',
-          start_date: '2025-04-15',
-          dueDate: '2025-07-15',
-          valorPlan: 400.0,
-          paymentStatus: 'Pendente',
-        },
-        {
-          name: 'Weverlyn Fernandes',
-          email: 'weverlyn@example.com',
-          phone: '(11) 93456-7890',
-          plan: 'Anual',
-          modality: 'MMA',
-          start_date: '2025-01-10',
-          dueDate: '2026-01-10',
-          valorPlan: 1500.0,
-          paymentStatus: 'Atrasado',
+          due_date: '2025-06-01',
+          plan_value: 150.0,
+          payment_status: 'Paid',
         },
       ];
 
@@ -81,11 +59,11 @@ export class GenerateSampleDataUseCase {
 
       randomStudents.forEach((student) => {
         const checkin = new Checkin();
-        checkin.studentId = student.id;
-        checkin.nameStudent = student.name;
-        checkin.data = formattedDate;
+        checkin.student_id = student.id;
+        checkin.student_name = student.name;
+        checkin.date = formattedDate;
         checkin.modality = student.modality;
-        checkin.ispresent = Math.random() > 0.2;
+        checkin.present = Math.random() > 0.2;
         sampleCheckins.push(checkin);
       });
     }

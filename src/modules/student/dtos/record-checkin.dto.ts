@@ -1,9 +1,13 @@
-import { IsBoolean, IsInt } from 'class-validator';
+import { IsBoolean, IsString } from 'class-validator';
 
 export class RecordCheckinDto {
-  @IsInt()
-  studentId: string;
+  @IsString()
+  student_id: string;
 
   @IsBoolean()
-  ispresent: boolean;
+  isPresent: boolean;
+
+  date: string;
+
+
 }

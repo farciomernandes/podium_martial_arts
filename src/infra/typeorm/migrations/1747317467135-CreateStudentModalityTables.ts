@@ -1,12 +1,10 @@
-import { MigrationInterface, QueryRunner, Table } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from "typeorm";
 
-export class CreatePaymentCheckinTables1747245591462
-  implements MigrationInterface
-{
-  public async up(queryRunner: QueryRunner): Promise<void> {
+export class CreateStudentModalityTables1747317467135 implements MigrationInterface {
+public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'payment',
+        name: 'student',
         columns: [
           {
             name: 'id',
@@ -16,30 +14,52 @@ export class CreatePaymentCheckinTables1747245591462
             default: 'uuid_generate_v4()',
           },
           {
-            name: 'studentId',
-            type: 'uuid',
-            isNullable: false,
-          },
-          {
-            name: 'month',
+            name: 'name',
             type: 'varchar',
             isNullable: false,
           },
           {
-            name: 'valor',
+            name: 'email',
+            type: 'varchar',
+            isNullable: false,
+            isUnique: true,
+          },
+          {
+            name: 'phone',
+            type: 'varchar',
+            isNullable: false,
+          },
+          {
+            name: 'plan',
+            type: 'enum',
+            enum: ['Monthly', 'Quarterly', 'Semiannual', 'Annual'],
+            isNullable: false,
+          },
+          {
+            name: 'modality',
+            type: 'varchar',
+            isNullable: false,
+          },
+          {
+            name: 'start_date',
+            type: 'varchar',
+            isNullable: false,
+          },
+          {
+            name: 'due_date',
+            type: 'varchar',
+            isNullable: false,
+          },
+          {
+            name: 'plan_value',
             type: 'float',
             isNullable: false,
           },
           {
-            name: 'status',
+            name: 'payment_status',
             type: 'enum',
-            enum: ['Pago', 'Pendente', 'Atrasado'],
+            enum: ['Paid', 'Pending', 'Overdue'],
             isNullable: false,
-          },
-          {
-            name: 'dataPagamento',
-            type: 'varchar',
-            isNullable: true,
           },
           {
             name: 'created_at',
@@ -58,10 +78,9 @@ export class CreatePaymentCheckinTables1747245591462
       true,
     );
 
-    // Create checkin table
     await queryRunner.createTable(
       new Table({
-        name: 'checkin',
+        name: 'modality',
         columns: [
           {
             name: 'id',
@@ -71,29 +90,15 @@ export class CreatePaymentCheckinTables1747245591462
             default: 'uuid_generate_v4()',
           },
           {
-            name: 'studentId',
-            type: 'uuid',
-            isNullable: false,
-          },
-          {
-            name: 'nameStudent',
+            name: 'name',
             type: 'varchar',
             isNullable: false,
+            isUnique: true,
           },
           {
-            name: 'data',
+            name: 'description',
             type: 'varchar',
-            isNullable: false,
-          },
-          {
-            name: 'modality',
-            type: 'varchar',
-            isNullable: false,
-          },
-          {
-            name: 'ispresent',
-            type: 'boolean',
-            isNullable: false,
+            isNullable: true,
           },
           {
             name: 'created_at',
@@ -114,7 +119,7 @@ export class CreatePaymentCheckinTables1747245591462
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('checkin');
-    await queryRunner.dropTable('payment');
+    await queryRunner.dropTable('modality');
+    await queryRunner.dropTable('student');
   }
 }

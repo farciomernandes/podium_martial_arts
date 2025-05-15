@@ -5,13 +5,13 @@ import { Student } from '@modules/student/entities/student.entity';
 @Entity('payment')
 export class Payment extends BaseORMEntity {
   @Column({ type: 'varchar', nullable: false })
-  studentId: string;
+  student_id: string;
 
   @Column({ type: 'varchar', nullable: false })
   month: string;
 
   @Column({ type: 'float', nullable: false })
-  valor: number;
+  value: number;
 
   @Column({
     type: 'enum',
@@ -21,9 +21,9 @@ export class Payment extends BaseORMEntity {
   status: 'Pago' | 'Pendente' | 'Atrasado';
 
   @Column({ type: 'varchar', nullable: true })
-  dataPagamento?: string;
+  payment_date?: string;
 
   @ManyToOne(() => Student, (student) => student.id)
-  @JoinColumn({ name: 'studentId' })
+  @JoinColumn({ name: 'student_id' })
   student: Student;
 }

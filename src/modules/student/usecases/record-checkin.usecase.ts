@@ -16,41 +16,41 @@ export class RecordCheckinUseCase {
 
   async execute(dto: RecordCheckinDto): Promise<Checkin> {
     this.logger.log(
-      `Recording checkin for studentId: ${dto.studentId}, ispresent: ${dto.ispresent}`,
+      `Recording checkin for student_id: ${dto.student_id}, isPresent: ${dto.isPresent}`,
     );
 
     const student = await this.studentRepository.findOne({
-      where: { id: dto.studentId },
+      where: { id: dto.student_id },
     });
 
     if (!student) {
-      this.logger.error(`Student not found for id: ${dto.studentId}`);
+      this.logger.error(`Student not found for id: ${dto.student_id}`);
       throw new BadRequestException('Student não encontrado');
     }
 
     const today = new Date().toISOString().split('T')[0];
     let checkin = await this.checkinRepository.findByStudentAndDate(
-      dto.studentId,
+      dto.student_id,
       today,
     );
 
     if (checkin) {
       this.logger.log(
-        `Updating existing checkin for studentId: ${dto.studentId}, date: ${today}`,
+        `Updating existing checkin for student_id: ${dto.student_id}, date: ${today}`,
       );
-      checkin.ispresent = dto.ispresent;
+      checkin.present = dto.isPresent;
       return this.checkinRepository.save(checkin);
     }
 
     checkin = new Checkin();
-    checkin.studentId = dto.studentId;
-    checkin.nameStudent = student.name;
-    checkin.data = today;
+    checkin.student_id = dto.student_id;
+    checkin.student_name = student.name;
+    checkin.date = today;
     checkin.modality = student.modality;
-    checkin.ispresent = dto.ispresent;
+    checkin.present = dto.isPresent;
 
     this.logger.log(
-      `Creating new checkin for studentId: ${dto.studentId}, date: ${today}`,
+      `Creating new checkin for student_id: ${dto.student_id}, date: ${today}`,
     );
     return this.checkinRepository.save(checkin);
   }

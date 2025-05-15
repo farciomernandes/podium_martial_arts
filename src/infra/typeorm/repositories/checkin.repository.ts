@@ -12,8 +12,8 @@ export class CheckinRepository extends Repository<Checkin> {
     super(Checkin, dataSource.createEntityManager());
   }
 
-  async findByStudentId(studentId: string): Promise<Checkin[]> {
-    return this.find({ where: { studentId: studentId } });
+  async findBystudent_id(student_id: string): Promise<Checkin[]> {
+    return this.find({ where: { student_id: student_id } });
   }
 
   async findByMonth(month: string): Promise<Checkin[]> {
@@ -23,9 +23,13 @@ export class CheckinRepository extends Repository<Checkin> {
   }
 
   async findByStudentAndDate(
-    studentId: string,
+    student_id: string,
     date: string,
   ): Promise<Checkin | null> {
-    return this.findOne({ where: { studentId: studentId, data: date } });
+    return this.findOne({ where: { student_id: student_id, date: date } });
+  }
+
+  async findByDateAndstudent_id(date: string, student_id: string): Promise<Checkin | null> {
+    return this.findOne({ where: { date: date, student_id: student_id.toString() } });
   }
 }

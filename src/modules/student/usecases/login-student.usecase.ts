@@ -24,12 +24,12 @@ export class LoginStudentUseCase {
     const phone = student.phone.replace(/\D/g, '');
     const lastFourDigits = phone.slice(-4);
 
-    if (credentials.senha !== lastFourDigits) {
+    if (credentials.password !== lastFourDigits) {
       this.logger.error(`Incorrect password for email: ${credentials.email}`);
       return { success: false, message: 'Senha incorreta' };
     }
 
     this.logger.log(`Login successful for: ${student.name}`);
-    return { success: true, student };
+    return { success: true, user: student };
   }
 }

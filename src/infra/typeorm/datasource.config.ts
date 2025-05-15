@@ -18,7 +18,9 @@ const config: DataSourceOptions = {
   migrations: [path.join(__dirname, `/migrations/*.{ts,js}`)],
   logger: 'advanced-console',
   migrationsTableName: 'migrations',
-  ssl: false,
+  ssl: {
+    rejectUnauthorized: false,
+  },
 };
 
 export const dataSource = new DataSource(config);

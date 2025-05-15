@@ -1,88 +1,55 @@
-import {
-  Controller,
-  Post,
-  Body,
-  Get,
-  Param,
-  HttpStatus,
-  HttpCode,
-  Query,
-} from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, Put, Delete, HttpStatus, HttpCode } from '@nestjs/common';
 import { ApiBody, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { StudentProvider } from '@modules/student/providers/student.provider';
-import { StudentLoginDto } from '@modules/student/dtos/student-login.dto';
-import { RecordCheckinDto } from '@modules/student/dtos/record-checkin.dto';
-import { ReportDto } from '@modules/student/dtos/report.dto';
-import { Checkin } from './entities/checkin.entity';
-import {
-  CheckinReportDto,
-  LoginResponseDto,
-  MonthlyReportDto,
-} from './dtos/student.types';
+import { Student } from '@modules/student/entities/student.entity';
+import { StudentProvider } from './providers/student.provider';
+import { CreateStudentDto, LoginResponseDto, UpdateStudentDto } from './dtos/student.types';
+import { StudentLoginDto } from './dtos/student-login.dto';
 
 @ApiTags('Student')
 @Controller('students')
 export class StudentController {
-  constructor(private readonly studentProvider: StudentProvider) {}
+  constructor(private readonly studentService: StudentProvider) {}
 
   @Post('login')
   @ApiOperation({ summary: 'Login a student' })
-  @ApiBody({
-    type: StudentLoginDto,
-    description: 'Credentials for student login',
-  })
+  @ApiBody({ type: StudentLoginDto, description: 'Student credentials' })
   @ApiOkResponse({ description: 'Login result', type: LoginResponseDto })
   @HttpCode(HttpStatus.OK)
   async login(@Body() credentials: StudentLoginDto): Promise<LoginResponseDto> {
-    return this.studentProvider.loginStudent(credentials);
+    return this.studentService.loginStudent(credentials);
   }
 
-  @Get(':id/checkins')
-  @ApiOperation({ summary: 'Get checkins for a student' })
-  @ApiOkResponse({ description: 'List of checkins', type: [Checkin] })
+  @Get()
+  @ApiOperation({ summary: 'Get all students' })
+  @ApiOkResponse({ description: 'List of students', type: [Student] })
   @HttpCode(HttpStatus.OK)
-  async getStudentCheckins(@Param('id') id: string): Promise<Checkin[]> {
-    return this.studentProvider.getStudentCheckins(id);
+  async getStudents(): Promise<Student[]> {
+    return this.studentService.getAllStudents();
   }
 
-  @Post('checkin')
-  @ApiOperation({ summary: 'Record a checkin' })
-  @ApiBody({ type: RecordCheckinDto, description: 'Checkin data' })
-  @ApiOkResponse({ description: 'Recorded checkin', type: Checkin })
-  @HttpCode(HttpStatus.OK)
-  async recordCheckin(@Body() dto: RecordCheckinDto): Promise<Checkin> {
-    return this.studentProvider.recordCheckin(dto);
+  @Post()
+  @ApiOperation({ summary: 'Create a student' })
+  @ApiBody({ type: CreateStudentDto, description: 'Student data' })
+  @ApiOkResponse({ description: 'Created student', type: Student })
+  @HttpCode(HttpStatus.CREATED)
+  async createStudent(@Body() dto: CreateStudentDto): Promise<Student> {
+    return this.studentService.createStudent(dto);
   }
 
-  @Get('checkins')
-  @ApiOperation({ summary: 'Get all checkins' })
-  @ApiOkResponse({ description: 'List of all checkins', type: [Checkin] })
+  @Put(':id')
+  @ApiOperation({ summary: 'Update a student' })
+  @ApiBody({ type: UpdateStudentDto, description: 'Student data to update' })
+  @ApiOkResponse({ description: 'Updated student', type: Student })
   @HttpCode(HttpStatus.OK)
-  async getAllCheckins(): Promise<Checkin[]> {
-    return this.studentProvider.getAllCheckins();
+  async updateStudent(@Param('id') id: string, @Body() dto: UpdateStudentDto): Promise<Student> {
+    return this.studentService.updateStudent(id, dto);
   }
 
-  @Get('reports/checkins')
-  @ApiOperation({ summary: 'Get checkin report' })
-  @ApiOkResponse({ description: 'Checkin report', type: CheckinReportDto })
+  @Delete(':id')
+  @ApiOperation({ summary: 'Delete a student' })
+  @ApiOkResponse({ description: 'Student deleted' })
   @HttpCode(HttpStatus.OK)
-  async getCheckinReport(@Query() query: ReportDto): Promise<CheckinReportDto> {
-    return this.studentProvider.getCheckinReport(query);
-  }
-
-  @Get('reports/monthly')
-  @ApiOperation({ summary: 'Get monthly payment report' })
-  @ApiOkResponse({ description: 'Monthly report', type: MonthlyReportDto })
-  @HttpCode(HttpStatus.OK)
-  async getMonthlyReport(@Query() query: ReportDto): Promise<MonthlyReportDto> {
-    return this.studentProvider.getMonthlyReport(query);
-  }
-
-  @Post('sample-data')
-  @ApiOperation({ summary: 'Generate sample data' })
-  @ApiOkResponse({ description: 'Sample data generated' })
-  @HttpCode(HttpStatus.OK)
-  async generateSampleData(): Promise<void> {
-    return this.studentProvider.generateSampleData();
+  async deleteStudent(@Param('id') id: string): Promise<void> {
+    return this.studentService.deleteStudent(id);
   }
 }

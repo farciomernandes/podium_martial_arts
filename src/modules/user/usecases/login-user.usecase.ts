@@ -1,0 +1,41 @@
+import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
+import { LoginDto } from '@modules/auth/dtos/auth.dto';
+import { JwtService } from '@nestjs/jwt';
+import * as bcrypt from 'bcrypt';
+import { UserRepository } from '@infra/typeorm/repositories/user.repository';
+import { LoginResponseDto } from '@modules/student/dtos/student.types';
+
+@Injectable()
+export class LoginUserUseCase {
+  private readonly logger: Logger = new Logger(this.constructor.name);
+
+  constructor(
+    private readonly userRepository: UserRepository,
+    private readonly jwtService: JwtService,
+  ) {}
+
+  async execute(credentials: LoginDto): Promise<LoginResponseDto> {
+    this.logger.log(`Starting login for user: ${credentials.email}`);
+    
+    const user = await this.userRepository.findByEmail(credentials.email);
+    if (!user) {
+      this.logger.warn(`User not found: ${credentials.email}`);
+      throw new UnauthorizedException('Invalid credentials');
+    }
+
+    const isPasswordValid = await bcrypt.compare(credentials.password, user.password);
+    if (!isPasswordValid) {
+      this.logger.warn(`Invalid password for user: ${credentials.email}`);
+      throw new UnauthorizedException('Invalid credentials');
+    }
+
+    const payload = { sub: user.id, email: user.email, role: user.role };
+    const token = this.jwtService.sign(payload);
+    
+    this.logger.log(`Login successful for user: ${credentials.email}`);
+    return {
+      token,
+      success: true,
+    };
+  }
+}

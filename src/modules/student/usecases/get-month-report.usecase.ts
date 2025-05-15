@@ -19,26 +19,26 @@ export class GetMonthlyReportUseCase {
     const payments = await this.paymentRepository.findByMonth(targetMonth);
     const students = await this.studentRepository.find();
 
-    const paymentStatus = {
+    const payment_status = {
       paid: payments.filter((p) => p.status === 'Pago').length,
       pending: payments.filter((p) => p.status === 'Pendente').length,
       late: payments.filter((p) => p.status === 'Atrasado').length,
     };
 
     const revenueExpected = students.reduce(
-      (sum, student) => sum + student.valorPlan,
+      (sum, student) => sum + student.plan_value,
       0,
     );
     const revenueReceived = payments
       .filter((p) => p.status === 'Pago')
-      .reduce((sum, payment) => sum + payment.valor, 0);
+      .reduce((sum, payment) => sum + payment.value, 0);
 
     const report: MonthlyReportDto = {
       month: targetMonth,
       studentCount: students.length,
       revenueExpected,
       revenueReceived,
-      paymentStatus,
+      payment_status,
     };
 
     this.logger.log(
@@ -47,7 +47,7 @@ export class GetMonthlyReportUseCase {
         studentCount: students.length,
         revenueExpected,
         revenueReceived,
-        paymentStatus,
+        payment_status,
       })}`,
     );
 

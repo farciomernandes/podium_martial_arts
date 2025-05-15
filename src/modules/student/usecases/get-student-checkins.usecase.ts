@@ -8,13 +8,13 @@ export class GetStudentCheckinsUseCase {
 
   constructor(private readonly checkinRepository: CheckinRepository) {}
 
-  async execute(studentId: string): Promise<Checkin[]> {
-    this.logger.log(`Fetching checkins for studentId: ${studentId}`);
+  async execute(student_id: string): Promise<Checkin[]> {
+    this.logger.log(`Fetching checkins for student_id: ${student_id}`);
 
-    const checkins = await this.checkinRepository.findByStudentId(studentId);
+    const checkins = await this.checkinRepository.findBystudent_id(student_id);
 
     this.logger.log(
-      `Found ${checkins.length} checkins for studentId: ${studentId}`,
+      `Found ${checkins.length} checkins for student_id: ${student_id}`,
     );
     return checkins;
   }

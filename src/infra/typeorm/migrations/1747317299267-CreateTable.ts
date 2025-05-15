@@ -1,12 +1,12 @@
-import { MigrationInterface, QueryRunner, Table } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from "typeorm";
 
-export class CreateStudentTable1747245578573 implements MigrationInterface {
+export class CreateTable1747317299267 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`);
 
     await queryRunner.createTable(
       new Table({
-        name: 'student',
+        name: 'user',
         columns: [
           {
             name: 'id',
@@ -16,52 +16,20 @@ export class CreateStudentTable1747245578573 implements MigrationInterface {
             default: 'uuid_generate_v4()',
           },
           {
-            name: 'name',
-            type: 'varchar',
-            isNullable: false,
-          },
-          {
             name: 'email',
             type: 'varchar',
             isNullable: false,
             isUnique: true,
           },
           {
-            name: 'phone',
+            name: 'password',
             type: 'varchar',
             isNullable: false,
           },
           {
-            name: 'plan',
+            name: 'role',
             type: 'enum',
-            enum: ['Mensal', 'Trimonthtral', 'Semonthtral', 'Anual'],
-            isNullable: false,
-          },
-          {
-            name: 'modality',
-            type: 'enum',
-            enum: ['Jiu-Jitsu', 'Muay Thai', 'MMA', 'Boxe'],
-            isNullable: false,
-          },
-          {
-            name: 'start_date',
-            type: 'varchar',
-            isNullable: false,
-          },
-          {
-            name: 'dueDate',
-            type: 'varchar',
-            isNullable: false,
-          },
-          {
-            name: 'valorPlan',
-            type: 'float',
-            isNullable: false,
-          },
-          {
-            name: 'paymentStatus',
-            type: 'enum',
-            enum: ['Pago', 'Pendente', 'Atrasado'],
+            enum: ['admin', 'instructor'],
             isNullable: false,
           },
           {
@@ -83,6 +51,6 @@ export class CreateStudentTable1747245578573 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('student');
+    await queryRunner.dropTable('user');
   }
 }

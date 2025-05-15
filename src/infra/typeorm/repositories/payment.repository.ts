@@ -16,7 +16,8 @@ export class PaymentRepository extends Repository<Payment> {
     return this.find({ where: { month: month } });
   }
 
-  async findByStudentId(studentId: string): Promise<Payment[]> {
-    return this.find({ where: { studentId: studentId } });
+  async findBystudent_id(student_id: string): Promise<Payment[]> {
+    return this.find({ where: { student_id: student_id } });
   }
+  
 }

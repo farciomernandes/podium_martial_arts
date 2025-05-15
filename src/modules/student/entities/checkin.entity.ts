@@ -5,21 +5,21 @@ import { Student } from './student.entity';
 @Entity('checkin')
 export class Checkin extends BaseORMEntity {
   @Column({ type: 'varchar', nullable: false })
-  studentId: string;
+  student_id: string;
+
+  @ManyToOne(() => Student)
+  @JoinColumn({ name: 'student_id' })
+  student: Student;
 
   @Column({ type: 'varchar', nullable: false })
-  nameStudent: string;
+  student_name: string;
 
   @Column({ type: 'varchar', nullable: false })
-  data: string;
+  date: string;
 
   @Column({ type: 'varchar', nullable: false })
   modality: string;
 
   @Column({ type: 'boolean', nullable: false })
-  ispresent: boolean;
-
-  @ManyToOne(() => Student, (student) => student.id)
-  @JoinColumn({ name: 'studentId' })
-  student: Student;
+  present: boolean;
 }

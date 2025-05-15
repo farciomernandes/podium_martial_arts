@@ -4,7 +4,6 @@ import {
   IsEmail,
   IsEnum,
   IsNumber,
-  IsObject,
   IsOptional,
   IsPhoneNumber,
   IsString,
@@ -12,6 +11,7 @@ import {
   ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class StudentDto {
   @IsString()
@@ -36,13 +36,13 @@ export class StudentDto {
   start_date: string;
 
   @IsDateString()
-  dueDate: string;
+  due_date: string;
 
   @IsNumber()
-  valorPlan: number;
+  valuePlan: number;
 
   @IsEnum(['Pago', 'Pendente', 'Atrasado'])
-  paymentStatus: 'Pago' | 'Pendente' | 'Atrasado';
+  payment_status: 'Pago' | 'Pendente' | 'Atrasado';
 }
 
 export class PaymentDto {
@@ -50,24 +50,23 @@ export class PaymentDto {
   id: string;
 
   @IsString()
-  studentId: string;
+  student_id: string;
 
   @Matches(/^\d{4}-\d{2}$/, { message: 'Mês deve estar no formato YYYY-MM' })
   month: string;
 
   @IsNumber()
-  valor: number;
+  value: number;
 
   @IsEnum(['Pago', 'Pendente', 'Atrasado'])
   status: 'Pago' | 'Pendente' | 'Atrasado';
 
   @IsOptional()
   @IsDateString()
-  dataPagamento?: string;
+  payment_date?: string;
 }
 
-// Monthly Report DTO
-class PaymentStatusDto {
+class payment_statusDto {
   @IsNumber()
   paid: number;
 
@@ -92,26 +91,16 @@ export class MonthlyReportDto {
   revenueReceived: number;
 
   @ValidateNested()
-  @Type(() => PaymentStatusDto)
-  paymentStatus: PaymentStatusDto;
+  @Type(() => payment_statusDto)
+  payment_status: payment_statusDto;
 }
 
-// Student Login DTO
-export class StudentLoginDto {
-  @IsEmail()
-  email: string;
-
-  @IsString()
-  senha: string;
-}
-
-// Check-in DTO
 export class CheckinDto {
   @IsString()
   id: string;
 
   @IsString()
-  studentId: string;
+  student_id: string;
 
   @IsString()
   nameStudent: string;
@@ -123,55 +112,154 @@ export class CheckinDto {
   modality: string;
 
   @IsBoolean()
-  ispresent: boolean;
+  isPresent: boolean;
 }
-
-// Check-in Report DTO
-class ModalityStatsDto {
-  @IsNumber()
-  total: number;
-
-  @IsNumber()
-  present: number;
-
-  @IsNumber()
-  absent: number;
-
-  @IsNumber()
-  rate: number;
-}
-
-export class CheckinReportDto {
+export class CreateStudentDto {
+  @ApiProperty({ example: 'John Doe', description: 'Student name' })
   @IsString()
-  month: string;
+  name: string;
 
+  @ApiProperty({ example: 'john@example.com', description: 'Student email' })
+  @IsEmail()
+  email: string;
+
+  @ApiProperty({ example: '(11) 91234-5678', description: 'Student phone' })
+  @IsString()
+  phone: string;
+
+  @ApiProperty({ example: 'Mensal', description: 'Plan type' })
+  @IsEnum(['Mensal', 'Trimonthtral', 'Semonthtral', 'Anual'])
+  plan: 'Monthly' | 'Quarterly' | 'Semiannual' | 'Annual';
+
+  @ApiProperty({ example: 'Jiu-Jitsu', description: 'Modality' })
+  @IsString()
+  modality: string;
+
+  @ApiProperty({ example: '2025-05-01', description: 'Start date' })
+  @IsString()
+  start_date: string;
+
+  @ApiProperty({ example: '2025-06-01', description: 'Due date' })
+  @IsString()
+  due_date: string;
+
+  @ApiProperty({ example: 150.0, description: 'Plan value' })
   @IsNumber()
-  totalCheckins: number;
+  plan_value: number;
 
-  @IsNumber()
-  presentCount: number;
-
-  @IsNumber()
-  absentCount: number;
-
-  @IsNumber()
-  presentRate: number;
-
-  @IsObject()
-  byModality: Record<string, ModalityStatsDto>;
+  @ApiProperty({ example: 'Paid', description: 'Payment status' })
+  @IsEnum(['Paid', 'Pending', 'Overdue'])
+  payment_status: 'Paid' | 'Pending' | 'Overdue';
 }
 
-// Login Response DTO
+export class UpdateStudentDto {
+  @ApiProperty({
+    example: 'John Doe',
+    description: 'Student name',
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  name?: string;
+
+  @ApiProperty({
+    example: 'john@example.com',
+    description: 'Student email',
+    required: false,
+  })
+  @IsOptional()
+  @IsEmail()
+  email?: string;
+
+  @ApiProperty({
+    example: '(11) 91234-5678',
+    description: 'Student phone',
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  phone?: string;
+
+  @ApiProperty({
+    example: 'Monthly',
+    description: 'Plan type',
+    required: false,
+  })
+  @IsOptional()
+  @IsEnum(['Monthly', 'Quarterly', 'Semiannual', 'Annual'])
+  plan?: 'Monthly' | 'Quarterly' | 'Semiannual' | 'Annual';
+
+  @ApiProperty({
+    example: 'Jiu-Jitsu',
+    description: 'Modality',
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  modality?: string;
+
+  @ApiProperty({
+    example: '2025-05-01',
+    description: 'Start date',
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  start_date?: string;
+
+  @ApiProperty({
+    example: '2025-06-01',
+    description: 'Due date',
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  due_date?: string;
+
+  @ApiProperty({ example: 150.0, description: 'Plan value', required: false })
+  @IsOptional()
+  @IsNumber()
+  plan_value?: number;
+
+  @ApiProperty({
+    example: 'Paid',
+    description: 'Payment status',
+    required: false,
+  })
+  @IsOptional()
+  @IsEnum(['Paid', 'Pending', 'Overdue'])
+  payment_status?: 'Paid' | 'Pending' | 'Overdue';
+}
+
 export class LoginResponseDto {
-  @IsBoolean()
+  @ApiProperty({ example: true, description: 'Login success status' })
   success: boolean;
 
-  @IsOptional()
-  @ValidateNested()
-  @Type(() => StudentDto)
-  student?: StudentDto;
+  @ApiProperty({ description: 'Student details', required: false })
+  user?: {
+    id: string;
+    name: string;
+    email: string;
+    phone: string;
+    plan: string;
+    modality: string;
+    start_date: string;
+    due_date: string;
+    plan_value: number;
+    payment_status: string;
+  };
 
-  @IsOptional()
-  @IsString()
+  @ApiProperty({
+    example: 'Invalid credentials',
+    description: 'Error message',
+    required: false,
+  })
   message?: string;
+
+  @ApiProperty({
+    example: 'ec1a8dd6-8733-4f94-852e-289366669d2b',
+    description: 'Bearer token',
+    required: false,
+  })
+  token?: string;
 }

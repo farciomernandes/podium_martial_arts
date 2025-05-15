@@ -8,6 +8,10 @@ import { CacheInterceptor, CacheModule } from '@nestjs/cache-manager';
 import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { StudentModule } from '@modules/student/student.module';
+import { PaymentModule } from '@modules/payment/payment.module';
+import { CheckinModule } from '@modules/student/checkin.module';
+import { ModalityModule } from '@modules/modality/modality.module';
+import { ModalityScheduleModule } from '@modules/modality/modality-schedule.module';
 
 @Module({
   imports: [
@@ -34,6 +38,10 @@ import { StudentModule } from '@modules/student/student.module';
     HealthModule,
     MainModule,
     StudentModule,
+    PaymentModule,
+    CheckinModule,
+    ModalityModule,
+    ModalityScheduleModule,
   ],
   controllers: [],
   providers: [
