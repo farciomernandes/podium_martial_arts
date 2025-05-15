@@ -242,14 +242,14 @@ export class LoginResponseDto {
   user?: {
     id: string;
     name: string;
-    email: string;
-    phone: string;
-    plan: string;
-    modality: string;
-    start_date: string;
-    due_date: string;
-    plan_value: number;
-    payment_status: string;
+    email?: string;
+    phone?: string;
+    plan?: string;
+    modality?: string;
+    start_date?: string;
+    due_date?: string;
+    plan_value?: number;
+    payment_status?: string;
   };
 
   @ApiProperty({

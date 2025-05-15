@@ -42,6 +42,11 @@ export class LoginUserUseCase {
     return {
       token,
       success: true,
+      user: {
+        id: user.id,
+        name: 'Administrador',
+        email: user.email,
+      },
     };
   }
 }
