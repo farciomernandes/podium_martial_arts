@@ -4,7 +4,6 @@ import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { ModalitySchedule } from '../entities/modality-schedule.entity';
 import { CreateModalityScheduleDto } from '../dtos/modality-schedule.dto';
 
-
 @Injectable()
 export class CreateModalityScheduleUseCase {
   private readonly logger: Logger = new Logger(this.constructor.name);
@@ -15,9 +14,13 @@ export class CreateModalityScheduleUseCase {
   ) {}
 
   async execute(dto: CreateModalityScheduleDto): Promise<ModalitySchedule> {
-    this.logger.log(`Creating modality schedule for modality ID: ${dto.modalityId}`);
-    
-    const modality = await this.modalityRepository.findOne({ where: { id: dto.modalityId } });
+    this.logger.log(
+      `Creating modality schedule for modality ID: ${dto.modalityId}`,
+    );
+
+    const modality = await this.modalityRepository.findOne({
+      where: { id: dto.modalityId },
+    });
     if (!modality) {
       this.logger.warn(`Modality not found: ${dto.modalityId}`);
       throw new NotFoundException('Modality not found');
@@ -25,8 +28,10 @@ export class CreateModalityScheduleUseCase {
 
     const schedule = this.modalityScheduleRepository.create(dto);
     await this.modalityScheduleRepository.save(schedule);
-    
-    this.logger.log(`Modality schedule created for modality ID: ${dto.modalityId}`);
+
+    this.logger.log(
+      `Modality schedule created for modality ID: ${dto.modalityId}`,
+    );
     return schedule;
   }
 }

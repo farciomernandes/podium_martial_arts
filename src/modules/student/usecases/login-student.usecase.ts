@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { StudentLoginDto } from '@modules/student/dtos/student-login.dto';
 import { StudentRepository } from '@infra/typeorm/repositories/student.repository';
 import { LoginResponseDto } from '../dtos/student.types';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class LoginStudentUseCase {
@@ -21,10 +22,12 @@ export class LoginStudentUseCase {
       return { success: false, message: 'Student não encontrado' };
     }
 
-    const phone = student.phone.replace(/\D/g, '');
-    const lastFourDigits = phone.slice(-4);
+    const isPasswordValid = await bcrypt.compare(
+      credentials.password,
+      student.password,
+    );
 
-    if (credentials.password !== lastFourDigits) {
+    if (!isPasswordValid) {
       this.logger.error(`Incorrect password for email: ${credentials.email}`);
       return { success: false, message: 'Senha incorreta' };
     }

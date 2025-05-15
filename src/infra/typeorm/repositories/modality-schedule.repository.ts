@@ -12,7 +12,7 @@ export class ModalityScheduleRepository extends Repository<ModalitySchedule> {
     super(ModalitySchedule, dataSource.createEntityManager());
   }
 
-  async findByModalityId(modalityId: string): Promise<ModalitySchedule[]> {
-    return this.find({ where: { modalityId } });
+  async findByModalityId(modality_id: string): Promise<ModalitySchedule[]> {
+    return this.find({ where: { modality_id } });
   }
 }

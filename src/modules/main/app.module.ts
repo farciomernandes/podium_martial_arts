@@ -12,6 +12,7 @@ import { PaymentModule } from '@modules/payment/payment.module';
 import { CheckinModule } from '@modules/student/checkin.module';
 import { ModalityModule } from '@modules/modality/modality.module';
 import { ModalityScheduleModule } from '@modules/modality/modality-schedule.module';
+import { UserModule } from '@modules/user/user.module';
 
 @Module({
   imports: [
@@ -42,6 +43,7 @@ import { ModalityScheduleModule } from '@modules/modality/modality-schedule.modu
     CheckinModule,
     ModalityModule,
     ModalityScheduleModule,
+    UserModule,
   ],
   controllers: [],
   providers: [

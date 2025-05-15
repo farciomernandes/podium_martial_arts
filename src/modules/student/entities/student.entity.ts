@@ -10,6 +10,9 @@ export class Student extends BaseORMEntity {
   email: string;
 
   @Column({ type: 'varchar', nullable: false })
+  password: string;
+
+  @Column({ type: 'varchar', nullable: false })
   phone: string;
 
   @Column({

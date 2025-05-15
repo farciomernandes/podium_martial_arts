@@ -6,7 +6,12 @@ import { UpdateStudentUseCase } from '@modules/student/usecases/update-student.u
 import { DeleteStudentUseCase } from '@modules/student/usecases/delete-student.usecase';
 import { Student } from '@modules/student/entities/student.entity';
 import { StudentLoginDto } from '../dtos/student-login.dto';
-import { CreateStudentDto, LoginResponseDto, UpdateStudentDto } from '../dtos/student.types';
+import {
+  CreateStudentDto,
+  LoginResponseDto,
+  UpdateStudentDto,
+} from '../dtos/student.types';
+import { GenerateSampleDataUseCase } from '../usecases/generate-sample-data.usecase';
 
 @Injectable()
 export class StudentProvider {
@@ -16,10 +21,15 @@ export class StudentProvider {
     private readonly createStudentUseCase: CreateStudentUseCase,
     private readonly updateStudentUseCase: UpdateStudentUseCase,
     private readonly deleteStudentUseCase: DeleteStudentUseCase,
+    private readonly generateSampleDataUseCase: GenerateSampleDataUseCase,
   ) {}
 
   async loginStudent(credentials: StudentLoginDto): Promise<LoginResponseDto> {
     return this.loginStudentUseCase.execute(credentials);
+  }
+
+  async generateSampleData(): Promise<void> {
+    return this.generateSampleDataUseCase.execute();
   }
 
   async getAllStudents(): Promise<Student[]> {

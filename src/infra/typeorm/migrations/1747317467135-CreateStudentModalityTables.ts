@@ -1,7 +1,9 @@
-import { MigrationInterface, QueryRunner, Table } from "typeorm";
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
-export class CreateStudentModalityTables1747317467135 implements MigrationInterface {
-public async up(queryRunner: QueryRunner): Promise<void> {
+export class CreateStudentModalityTables1747317467135
+  implements MigrationInterface
+{
+  public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
         name: 'student',
@@ -23,6 +25,11 @@ public async up(queryRunner: QueryRunner): Promise<void> {
             type: 'varchar',
             isNullable: false,
             isUnique: true,
+          },
+          {
+            name: 'password',
+            type: 'varchar',
+            isNullable: false,
           },
           {
             name: 'phone',

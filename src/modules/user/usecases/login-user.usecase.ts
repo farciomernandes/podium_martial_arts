@@ -16,22 +16,28 @@ export class LoginUserUseCase {
 
   async execute(credentials: LoginDto): Promise<LoginResponseDto> {
     this.logger.log(`Starting login for user: ${credentials.email}`);
-    
+
     const user = await this.userRepository.findByEmail(credentials.email);
     if (!user) {
       this.logger.warn(`User not found: ${credentials.email}`);
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    const isPasswordValid = await bcrypt.compare(credentials.password, user.password);
+    const isPasswordValid = await bcrypt.compare(
+      credentials.password,
+      user.password,
+    );
     if (!isPasswordValid) {
       this.logger.warn(`Invalid password for user: ${credentials.email}`);
       throw new UnauthorizedException('Invalid credentials');
     }
 
     const payload = { sub: user.id, email: user.email, role: user.role };
-    const token = this.jwtService.sign(payload);
-    
+    const token = this.jwtService.sign(payload, {
+      secret: process.env.JWT_SECRET_KEY,
+      expiresIn: process.env.JWT_EXPIRES_IN,
+    });
+
     this.logger.log(`Login successful for user: ${credentials.email}`);
     return {
       token,

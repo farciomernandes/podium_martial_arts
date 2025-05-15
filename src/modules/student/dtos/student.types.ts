@@ -123,6 +123,9 @@ export class CreateStudentDto {
   @IsEmail()
   email: string;
 
+  @ApiProperty({ example: 'password_123', description: 'Student password' })
+  password: string;
+
   @ApiProperty({ example: '(11) 91234-5678', description: 'Student phone' })
   @IsString()
   phone: string;

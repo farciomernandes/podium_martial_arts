@@ -5,10 +5,10 @@ import { Modality } from './modality.entity';
 @Entity('modality_schedule')
 export class ModalitySchedule extends BaseORMEntity {
   @Column({ type: 'varchar', nullable: false })
-  modalityId: string;
+  modality_id: string;
 
   @ManyToOne(() => Modality)
-  @JoinColumn({ name: 'modalityId' })
+  @JoinColumn({ name: 'modality_id' })
   modality: Modality;
 
   @Column({ type: 'varchar', nullable: false })

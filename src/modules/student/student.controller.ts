@@ -1,8 +1,22 @@
-import { Controller, Post, Body, Get, Param, Put, Delete, HttpStatus, HttpCode } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Get,
+  Param,
+  Put,
+  Delete,
+  HttpStatus,
+  HttpCode,
+} from '@nestjs/common';
 import { ApiBody, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Student } from '@modules/student/entities/student.entity';
 import { StudentProvider } from './providers/student.provider';
-import { CreateStudentDto, LoginResponseDto, UpdateStudentDto } from './dtos/student.types';
+import {
+  CreateStudentDto,
+  LoginResponseDto,
+  UpdateStudentDto,
+} from './dtos/student.types';
 import { StudentLoginDto } from './dtos/student-login.dto';
 
 @ApiTags('Student')
@@ -27,6 +41,14 @@ export class StudentController {
     return this.studentService.getAllStudents();
   }
 
+  @Get('generation-default')
+  @ApiOperation({ summary: 'Generate default items' })
+  @ApiOkResponse({ description: 'Generate default items', type: [Student] })
+  @HttpCode(HttpStatus.OK)
+  async generateDefaultData(): Promise<void> {
+    this.studentService.generateSampleData();
+  }
+
   @Post()
   @ApiOperation({ summary: 'Create a student' })
   @ApiBody({ type: CreateStudentDto, description: 'Student data' })
@@ -41,7 +63,10 @@ export class StudentController {
   @ApiBody({ type: UpdateStudentDto, description: 'Student data to update' })
   @ApiOkResponse({ description: 'Updated student', type: Student })
   @HttpCode(HttpStatus.OK)
-  async updateStudent(@Param('id') id: string, @Body() dto: UpdateStudentDto): Promise<Student> {
+  async updateStudent(
+    @Param('id') id: string,
+    @Body() dto: UpdateStudentDto,
+  ): Promise<Student> {
     return this.studentService.updateStudent(id, dto);
   }
 

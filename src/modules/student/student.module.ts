@@ -9,16 +9,61 @@ import { DeleteStudentUseCase } from '@modules/student/usecases/delete-student.u
 import { StudentRepository } from '@infra/typeorm/repositories/student.repository';
 import { StudentProvider } from './providers/student.provider';
 import { StudentController } from './student.controller';
+import { GenerateSampleDataUseCase } from './usecases/generate-sample-data.usecase';
+import { CheckinRepository } from '@infra/typeorm/repositories/checkin.repository';
+import { PaymentRepository } from '@infra/typeorm/repositories/payment.repository';
+import { ModalityRepository } from '@infra/typeorm/repositories/modality.repository';
+import { ModalityScheduleRepository } from '@infra/typeorm/repositories/modality-schedule.repository';
+import { Checkin } from './entities/checkin.entity';
+import { Payment } from '@modules/payment/entities/payment.entity';
+import { Modality } from '@modules/modality/entities/modality.entity';
+import { ModalitySchedule } from '@modules/modality/entities/modality-schedule.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Student])],
+  imports: [
+    TypeOrmModule.forFeature([
+      Student,
+      Checkin,
+      Payment,
+      Modality,
+      ModalitySchedule,
+    ]),
+  ],
   providers: [
     StudentRepository,
+    CheckinRepository,
+    PaymentRepository,
+    ModalityRepository,
+    ModalityScheduleRepository,
     {
       provide: LoginStudentUseCase,
       useFactory: (studentRepository: StudentRepository) =>
         new LoginStudentUseCase(studentRepository),
       inject: [StudentRepository],
+    },
+    {
+      provide: GenerateSampleDataUseCase,
+      useFactory: (
+        studentRepository: StudentRepository,
+        checkinRepository: CheckinRepository,
+        paymentRepository: PaymentRepository,
+        modalityRepository: ModalityRepository,
+        modalityScheduleRepository: ModalityScheduleRepository,
+      ) =>
+        new GenerateSampleDataUseCase(
+          studentRepository,
+          checkinRepository,
+          paymentRepository,
+          modalityRepository,
+          modalityScheduleRepository,
+        ),
+      inject: [
+        StudentRepository,
+        CheckinRepository,
+        PaymentRepository,
+        ModalityRepository,
+        ModalityScheduleRepository,
+      ],
     },
     {
       provide: GetAllStudentsUseCase,
@@ -52,6 +97,7 @@ import { StudentController } from './student.controller';
         createStudentUseCase: CreateStudentUseCase,
         updateStudentUseCase: UpdateStudentUseCase,
         deleteStudentUseCase: DeleteStudentUseCase,
+        generateSampleDataUseCase: GenerateSampleDataUseCase,
       ) =>
         new StudentProvider(
           loginStudentUseCase,
@@ -59,6 +105,7 @@ import { StudentController } from './student.controller';
           createStudentUseCase,
           updateStudentUseCase,
           deleteStudentUseCase,
+          generateSampleDataUseCase,
         ),
       inject: [
         LoginStudentUseCase,
@@ -66,6 +113,7 @@ import { StudentController } from './student.controller';
         CreateStudentUseCase,
         UpdateStudentUseCase,
         DeleteStudentUseCase,
+        GenerateSampleDataUseCase,
       ],
     },
   ],
