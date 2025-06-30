@@ -3,7 +3,7 @@ import { GetAllCheckinsUseCase } from '../usecases/get-all-checkins.usecase';
 import { RecordCheckinUseCase } from '../usecases/record-checkin.usecase';
 import { GetStudentCheckinsUseCase } from '../usecases/get-student-checkins.usecase';
 import { GetCheckinReportUseCase } from '../usecases/get-checkin-report.usecase';
-import { RecordCheckinDto } from '../dtos/record-checkin.dto';
+import { CreateCheckinDto } from '../dtos/record-checkin.dto';
 import { Checkin } from '../entities/checkin.entity';
 import { CheckinReportDto, ReportDto } from '../dtos/report.dto';
 
@@ -16,7 +16,7 @@ export class CheckinProvider {
     private readonly getCheckinReportUseCase: GetCheckinReportUseCase,
   ) {}
 
-  async recordCheckin(dto: RecordCheckinDto): Promise<Checkin> {
+  async recordCheckin(dto: CreateCheckinDto): Promise<Checkin> {
     return this.recordCheckinUseCase.execute(dto);
   }
 

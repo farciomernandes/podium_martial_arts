@@ -1,10 +1,9 @@
-import { IsNumber, IsString, IsOptional } from 'class-validator';
+import { IsString, IsOptional } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateModalityScheduleDto {
-  @ApiProperty({ example: 1, description: 'Modality ID' })
-  @IsNumber()
-  modalityId: string;
+  @ApiProperty({ example: '1', description: 'Modality ID' })
+  modality_id: string;
 
   @ApiProperty({ example: 'Monday', description: 'Day of the week' })
   @IsString()
@@ -20,10 +19,9 @@ export class CreateModalityScheduleDto {
 }
 
 export class UpdateModalityScheduleDto {
-  @ApiProperty({ example: 1, description: 'Modality ID', required: false })
+  @ApiProperty({ example: '1', description: 'Modality ID', required: false })
   @IsOptional()
-  @IsNumber()
-  modalityId?: string;
+  modality_id?: string;
 
   @ApiProperty({
     example: 'Monday',
@@ -52,5 +50,5 @@ export class IsClassDayDto {
 
   @ApiProperty({ example: 1, description: 'Modality ID' })
   @IsString()
-  modalityId: string;
+  modality_id: string;
 }

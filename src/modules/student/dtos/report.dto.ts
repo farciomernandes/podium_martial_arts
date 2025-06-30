@@ -1,5 +1,6 @@
 import { IsOptional, IsString, IsNumber } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { ModalityEnum } from '@modules/@shared/dtos/enums';
 
 export class ReportDto {
   @ApiProperty({ example: '2025-05', description: 'Month filter', required: false })
@@ -7,7 +8,7 @@ export class ReportDto {
   @IsString()
   month?: string;
 
-  @ApiProperty({ example: 'Jiu-Jitsu', description: 'Modality filter', required: false })
+  @ApiProperty({ example: ModalityEnum.JiuJitsu, description: 'Modality filter', required: false })
   @IsOptional()
   @IsString()
   modality?: string;

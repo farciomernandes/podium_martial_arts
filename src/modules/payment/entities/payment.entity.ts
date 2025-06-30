@@ -1,6 +1,7 @@
 import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
 import { BaseORMEntity } from '@infra/typeorm/shared/entities/base-orm.entity';
 import { Student } from '@modules/student/entities/student.entity';
+import { PaymentStatusEnum } from '@modules/@shared/dtos/enums';
 
 @Entity('payment')
 export class Payment extends BaseORMEntity {
@@ -15,11 +16,11 @@ export class Payment extends BaseORMEntity {
 
   @Column({
     type: 'enum',
-    enum: ['Pago', 'Pendente', 'Atrasado'],
+    enum: [PaymentStatusEnum.Paid, PaymentStatusEnum.Pending, PaymentStatusEnum.Overdue],
     nullable: false,
   })
-  status: 'Pago' | 'Pendente' | 'Atrasado';
-
+  status: PaymentStatusEnum.Paid | PaymentStatusEnum.Pending | PaymentStatusEnum.Overdue;
+  
   @Column({ type: 'varchar', nullable: true })
   payment_date?: string;
 

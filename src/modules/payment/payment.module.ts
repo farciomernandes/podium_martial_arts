@@ -6,11 +6,14 @@ import { GetAllPaymentsUseCase } from './usecases/get-all-payments.usecase';
 import { GetStudentPaymentsUseCase } from '@modules/student/usecases/get-student-payments.usecase';
 import { PaymentProvider } from './providers/payment.provider';
 import { PaymentController } from './payment.controller';
-
+import { CreatePaymentUseCase } from './usecases/create-payment-usecase';
+import { StudentModule } from '@modules/student/student.module';
+import { StudentRepository } from '@infra/typeorm/repositories/student.repository';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Payment])],
+  imports: [TypeOrmModule.forFeature([Payment]), StudentModule],
   providers: [
+    StudentRepository,
     PaymentRepository,
     {
       provide: GetAllPaymentsUseCase,
@@ -25,13 +28,26 @@ import { PaymentController } from './payment.controller';
       inject: [PaymentRepository],
     },
     {
+      provide: CreatePaymentUseCase,
+      useFactory: (
+        paymentRepository: PaymentRepository,
+        studentRepository: StudentRepository,
+      ) => new CreatePaymentUseCase(paymentRepository, studentRepository),
+      inject: [PaymentRepository, StudentRepository],
+    },
+    {
       provide: PaymentProvider,
       useFactory: (
         getAllPaymentsUseCase: GetAllPaymentsUseCase,
         getStudentPaymentsUseCase: GetStudentPaymentsUseCase,
+        createPaymentUseCase: CreatePaymentUseCase,
       ) =>
-        new PaymentProvider(getAllPaymentsUseCase, getStudentPaymentsUseCase),
-      inject: [GetAllPaymentsUseCase, GetStudentPaymentsUseCase],
+        new PaymentProvider(
+          getAllPaymentsUseCase,
+          getStudentPaymentsUseCase,
+          createPaymentUseCase,
+        ),
+      inject: [GetAllPaymentsUseCase, GetStudentPaymentsUseCase, CreatePaymentUseCase],
     },
   ],
   controllers: [PaymentController],

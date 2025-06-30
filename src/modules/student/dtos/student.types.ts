@@ -12,6 +12,7 @@ import {
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
+import { ModalityEnum, PaymentStatusEnum, PlanTypeEnum } from '@modules/@shared/dtos/enums';
 
 export class StudentDto {
   @IsString()
@@ -26,11 +27,11 @@ export class StudentDto {
   @IsPhoneNumber('BR')
   phone: string;
 
-  @IsEnum(['Mensal', 'Trimonthtral', 'Semonthtral', 'Anual'])
-  plan: 'Mensal' | 'Trimonthtral' | 'Semonthtral' | 'Anual';
+  @IsEnum([PlanTypeEnum.Monthly, PlanTypeEnum.Quarterly, PlanTypeEnum.Semiannual, PlanTypeEnum.Annual])
+  plan: PlanTypeEnum.Monthly | PlanTypeEnum.Quarterly | PlanTypeEnum.Semiannual | PlanTypeEnum.Annual;
 
-  @IsEnum(['Jiu-Jitsu', 'Muay Thai', 'MMA', 'Boxe'])
-  modality: 'Jiu-Jitsu' | 'Muay Thai' | 'MMA' | 'Boxe';
+  @IsEnum([ModalityEnum.JiuJitsu, ModalityEnum.MMA,ModalityEnum.MuayThai, ModalityEnum.Boxe])
+  modality: ModalityEnum.JiuJitsu | ModalityEnum.MMA |ModalityEnum.MuayThai | ModalityEnum.Boxe;
 
   @IsDateString()
   start_date: string;
@@ -108,7 +109,7 @@ export class CheckinDto {
   @IsDateString()
   data: string;
 
-  @IsEnum(['Jiu-Jitsu', 'Muay Thai', 'MMA', 'Boxe'])
+  @IsEnum([ModalityEnum.JiuJitsu, ModalityEnum.MMA,ModalityEnum.MuayThai, ModalityEnum.Boxe])
   modality: string;
 
   @IsBoolean()
@@ -130,11 +131,11 @@ export class CreateStudentDto {
   @IsString()
   phone: string;
 
-  @ApiProperty({ example: 'Mensal', description: 'Plan type' })
-  @IsEnum(['Mensal', 'Trimonthtral', 'Semonthtral', 'Anual'])
-  plan: 'Monthly' | 'Quarterly' | 'Semiannual' | 'Annual';
+  @ApiProperty({ example: PlanTypeEnum.Monthly, description: 'Plan type' })
+  @IsEnum([PlanTypeEnum.Monthly, PlanTypeEnum.Quarterly, PlanTypeEnum.Semiannual, PlanTypeEnum.Annual])
+  plan: PlanTypeEnum.Monthly | PlanTypeEnum.Quarterly | PlanTypeEnum.Semiannual | PlanTypeEnum.Annual;
 
-  @ApiProperty({ example: 'Jiu-Jitsu', description: 'Modality' })
+  @ApiProperty({ example: ModalityEnum.JiuJitsu, description: 'Modality' })
   @IsString()
   modality: string;
 
@@ -150,9 +151,9 @@ export class CreateStudentDto {
   @IsNumber()
   plan_value: number;
 
-  @ApiProperty({ example: 'Paid', description: 'Payment status' })
-  @IsEnum(['Paid', 'Pending', 'Overdue'])
-  payment_status: 'Paid' | 'Pending' | 'Overdue';
+  @ApiProperty({ example: PaymentStatusEnum.Paid, description: 'Payment status' })
+  @IsEnum([PaymentStatusEnum.Paid, PaymentStatusEnum.Pending, PaymentStatusEnum.Overdue])
+  payment_status: PaymentStatusEnum.Paid | PaymentStatusEnum.Pending | PaymentStatusEnum.Overdue;
 }
 
 export class UpdateStudentDto {
@@ -184,16 +185,16 @@ export class UpdateStudentDto {
   phone?: string;
 
   @ApiProperty({
-    example: 'Monthly',
+    example: PlanTypeEnum.Monthly,
     description: 'Plan type',
     required: false,
   })
   @IsOptional()
-  @IsEnum(['Monthly', 'Quarterly', 'Semiannual', 'Annual'])
-  plan?: 'Monthly' | 'Quarterly' | 'Semiannual' | 'Annual';
+  @IsEnum([PlanTypeEnum.Monthly, PlanTypeEnum.Quarterly, PlanTypeEnum.Semiannual, PlanTypeEnum.Annual])
+  plan?: PlanTypeEnum.Monthly | PlanTypeEnum.Quarterly | PlanTypeEnum.Semiannual | PlanTypeEnum.Annual;
 
   @ApiProperty({
-    example: 'Jiu-Jitsu',
+    example: ModalityEnum.JiuJitsu,
     description: 'Modality',
     required: false,
   })
@@ -225,13 +226,13 @@ export class UpdateStudentDto {
   plan_value?: number;
 
   @ApiProperty({
-    example: 'Paid',
+    example: PaymentStatusEnum.Paid,
     description: 'Payment status',
     required: false,
   })
   @IsOptional()
-  @IsEnum(['Paid', 'Pending', 'Overdue'])
-  payment_status?: 'Paid' | 'Pending' | 'Overdue';
+  @IsEnum([PaymentStatusEnum.Paid, PaymentStatusEnum.Pending, PaymentStatusEnum.Overdue])
+  payment_status?: PaymentStatusEnum.Paid | PaymentStatusEnum.Pending | PaymentStatusEnum.Overdue;
 }
 
 export class LoginResponseDto {

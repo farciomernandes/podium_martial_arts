@@ -1,9 +1,9 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { BadRequestException } from '@nestjs/common';
-import { RecordCheckinDto } from '@modules/student/dtos/record-checkin.dto';
 import { StudentRepository } from '@infra/typeorm/repositories/student.repository';
 import { CheckinRepository } from '@infra/typeorm/repositories/checkin.repository';
 import { Checkin } from '@modules/student/entities/checkin.entity';
+import { CreateCheckinDto } from '../dtos/record-checkin.dto';
 
 @Injectable()
 export class RecordCheckinUseCase {
@@ -14,7 +14,7 @@ export class RecordCheckinUseCase {
     private readonly checkinRepository: CheckinRepository,
   ) {}
 
-  async execute(dto: RecordCheckinDto): Promise<Checkin> {
+  async execute(dto: CreateCheckinDto): Promise<Checkin> {
     this.logger.log(
       `Recording checkin for student_id: ${dto.student_id}, isPresent: ${dto.isPresent}`,
     );

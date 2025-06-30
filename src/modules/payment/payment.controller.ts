@@ -1,7 +1,8 @@
-import { Controller, Get, Param, HttpStatus, HttpCode } from '@nestjs/common';
-import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Controller, Get, Param, HttpStatus, HttpCode, Post, Body } from '@nestjs/common';
+import { ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Payment } from '@modules/payment/entities/payment.entity';
 import { PaymentProvider } from './providers/payment.provider';
+import { CreatePaymentDto } from './dtos/payment.dto';
 
 @ApiTags('Payment')
 @Controller('payments')
@@ -22,5 +23,14 @@ export class PaymentController {
   @HttpCode(HttpStatus.OK)
   async getStudentPayments(@Param('student_id') student_id: string): Promise<Payment[]> {
     return this.paymentService.getStudentPayments(student_id);
+  }
+
+    @Post()
+  @ApiOperation({ summary: 'Criar um novo pagamento' })
+  @ApiCreatedResponse
+  ({ description: 'Pagamento criado com sucesso', type: Payment })
+  @HttpCode(HttpStatus.CREATED)
+  async createPayment(@Body() createPaymentDto: CreatePaymentDto): Promise<Payment> {
+    return this.paymentService.createPayment(createPaymentDto);
   }
 }

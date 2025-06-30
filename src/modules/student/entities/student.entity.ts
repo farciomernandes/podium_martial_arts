@@ -1,5 +1,6 @@
 import { Entity, Column } from 'typeorm';
 import { BaseORMEntity } from '@infra/typeorm/shared/entities/base-orm.entity';
+import { PaymentStatusEnum, PlanTypeEnum } from '@modules/@shared/dtos/enums';
 
 @Entity('student')
 export class Student extends BaseORMEntity {
@@ -17,10 +18,10 @@ export class Student extends BaseORMEntity {
 
   @Column({
     type: 'enum',
-    enum: ['Monthly', 'Quarterly', 'Semiannual', 'Annual'],
+    enum: [PlanTypeEnum.Monthly, PlanTypeEnum.Quarterly, PlanTypeEnum.Semiannual, PlanTypeEnum.Annual],
     nullable: false,
   })
-  plan: 'Monthly' | 'Quarterly' | 'Semiannual' | 'Annual';
+  plan: PlanTypeEnum.Monthly | PlanTypeEnum.Quarterly | PlanTypeEnum.Semiannual | PlanTypeEnum.Annual;
 
   @Column({ type: 'varchar', nullable: false })
   modality: string;
@@ -36,8 +37,8 @@ export class Student extends BaseORMEntity {
 
   @Column({
     type: 'enum',
-    enum: ['Paid', 'Pending', 'Overdue'],
+    enum: [PaymentStatusEnum.Paid, PaymentStatusEnum.Pending, PaymentStatusEnum.Overdue],
     nullable: false,
   })
-  payment_status: 'Paid' | 'Pending' | 'Overdue';
+  payment_status: PaymentStatusEnum.Paid | PaymentStatusEnum.Pending | PaymentStatusEnum.Overdue;
 }

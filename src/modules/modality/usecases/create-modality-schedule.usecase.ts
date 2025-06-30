@@ -15,14 +15,14 @@ export class CreateModalityScheduleUseCase {
 
   async execute(dto: CreateModalityScheduleDto): Promise<ModalitySchedule> {
     this.logger.log(
-      `Creating modality schedule for modality ID: ${dto.modalityId}`,
+      `Creating modality schedule for modality ID: ${dto.modality_id}`,
     );
 
     const modality = await this.modalityRepository.findOne({
-      where: { id: dto.modalityId },
+      where: { id: dto.modality_id },
     });
     if (!modality) {
-      this.logger.warn(`Modality not found: ${dto.modalityId}`);
+      this.logger.warn(`Modality not found: ${dto.modality_id}`);
       throw new NotFoundException('Modality not found');
     }
 
@@ -30,7 +30,7 @@ export class CreateModalityScheduleUseCase {
     await this.modalityScheduleRepository.save(schedule);
 
     this.logger.log(
-      `Modality schedule created for modality ID: ${dto.modalityId}`,
+      `Modality schedule created for modality ID: ${dto.modality_id}`,
     );
     return schedule;
   }

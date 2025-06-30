@@ -1,7 +1,7 @@
 import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { LoginDto } from '@modules/auth/dtos/auth.dto';
 import { JwtService } from '@nestjs/jwt';
-import * as bcrypt from 'bcrypt';
+import { BcryptHashUtils } from '@infra/utils/bcrypt-hash.utils';
 import { UserRepository } from '@infra/typeorm/repositories/user.repository';
 import { LoginResponseDto } from '@modules/student/dtos/student.types';
 
@@ -16,14 +16,16 @@ export class LoginUserUseCase {
 
   async execute(credentials: LoginDto): Promise<LoginResponseDto> {
     this.logger.log(`Starting login for user: ${credentials.email}`);
-
+    console.log('senha: ', credentials.password);
+    console.log('senha com hash: ', await BcryptHashUtils.handle(credentials.password));
     const user = await this.userRepository.findByEmail(credentials.email);
     if (!user) {
       this.logger.warn(`User not found: ${credentials.email}`);
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    const isPasswordValid = await bcrypt.compare(
+    await BcryptHashUtils.handle(credentials.password);
+    const isPasswordValid = await BcryptHashUtils.verifyOldPassword(
       credentials.password,
       user.password,
     );

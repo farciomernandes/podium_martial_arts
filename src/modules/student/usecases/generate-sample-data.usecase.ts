@@ -9,6 +9,7 @@ import { Modality } from '@modules/modality/entities/modality.entity';
 import { ModalityScheduleRepository } from '@infra/typeorm/repositories/modality-schedule.repository';
 import { ModalitySchedule } from '@modules/modality/entities/modality-schedule.entity';
 import { Checkin } from '../entities/checkin.entity';
+import { ModalityEnum, PaymentStatusEnum, PlanTypeEnum } from '@modules/@shared/dtos/enums';
 
 @Injectable()
 export class GenerateSampleDataUseCase {
@@ -35,10 +36,10 @@ export class GenerateSampleDataUseCase {
     if (existingModalities.length === 0) {
       this.logger.log('No modalities found, creating default modalities');
       const defaultModalities: Partial<Modality>[] = [
-        { name: 'Jiu-Jitsu', description: 'Brazilian Jiu-Jitsu training' },
-        { name: 'Muay Thai', description: 'Thai boxing and kickboxing' },
-        { name: 'MMA', description: 'Mixed Martial Arts' },
-        { name: 'Boxe', description: 'Traditional boxing' },
+        { name: ModalityEnum.JiuJitsu, description: 'Brazilian Jiu-Jitsu training' },
+        { name: ModalityEnum.MuayThai, description: 'Thai boxing and kickboxing' },
+        { name: ModalityEnum.MMA, description: 'Mixed Martial Arts' },
+        { name: ModalityEnum.Boxe, description: 'Traditional boxing' },
       ];
       await this.modalityRepository.save(defaultModalities);
       this.logger.log('Default modalities created');
@@ -85,52 +86,51 @@ export class GenerateSampleDataUseCase {
           name: 'Marcio Fernandes',
           email: 'marcio@example.com',
           phone: '(11) 91234-5678',
-          plan: 'Monthly',
-          modality: 'Jiu-Jitsu',
+          plan: PlanTypeEnum.Monthly,
+          modality: ModalityEnum.JiuJitsu,
           start_date: '2025-05-01',
           due_date: '2025-06-01',
           plan_value: 150.0,
-          payment_status: 'Paid',
+          payment_status: PaymentStatusEnum.Paid,
         },
         {
           name: 'Eriky Ryan',
           email: 'eriky@example.com',
           phone: '(11) 92345-6789',
-          plan: 'Quarterly',
-          modality: 'Muay Thai',
+          plan: PlanTypeEnum.Quarterly,
+          modality: ModalityEnum.MuayThai,
           start_date: '2025-04-15',
           due_date: '2025-07-15',
           plan_value: 400.0,
-          payment_status: 'Pending',
+          payment_status: PaymentStatusEnum.Pending,
         },
         {
           name: 'Weverlyn Fernandes',
           email: 'weverlyn@example.com',
           phone: '(11) 93456-7890',
-          plan: 'Annual',
-          modality: 'MMA',
+          plan: PlanTypeEnum.Monthly,
+          modality: ModalityEnum.MMA,
           start_date: '2025-01-10',
           due_date: '2026-01-10',
           plan_value: 1500.0,
-          payment_status: 'Overdue',
+          payment_status: PaymentStatusEnum.Overdue,
         },
         {
           name: 'Ana Silva',
           email: 'ana@example.com',
           phone: '(11) 94567-8901',
-          plan: 'Annual',
-          modality: 'Boxe',
+          plan: PlanTypeEnum.Monthly,
+          modality: ModalityEnum.Boxe,
           start_date: '2025-03-01',
           due_date: '2025-09-01',
           plan_value: 800.0,
-          payment_status: 'Paid',
+          payment_status: PaymentStatusEnum.Paid,
         },
       ];
       await this.studentRepository.save(defaultStudents);
       this.logger.log('Default students created');
     }
 
-    // Generate payments
     const students = await this.studentRepository.find();
     const existingPayments = await this.paymentRepository.find();
     if (existingPayments.length === 0) {
@@ -141,18 +141,16 @@ export class GenerateSampleDataUseCase {
       for (let i = 0; i < 3; i++) {
         const monthDate = new Date(today);
         monthDate.setMonth(today.getMonth() - i);
-        const formattedMonth = monthDate.toISOString().slice(0, 7); // YYYY-MM
+        const formattedMonth = monthDate.toISOString().slice(0, 7);
 
         students.forEach((student) => {
           const payment = new Payment();
           payment.student_id = student.id;
           payment.month = formattedMonth;
           payment.value = student.plan_value;
-          payment.status = ['Pago', 'Pendente', 'Atrasado'][
-            Math.floor(Math.random() * 3)
-          ] as 'Pago' | 'Pendente' | 'Atrasado';
+          payment.status = PaymentStatusEnum.Paid,
           payment.payment_date =
-            payment.status === 'Pago'
+            payment.status === PaymentStatusEnum.Paid
               ? new Date().toISOString().slice(0, 10)
               : undefined;
           samplePayments.push(payment);
@@ -163,7 +161,6 @@ export class GenerateSampleDataUseCase {
       this.logger.log(`Generated ${samplePayments.length} sample payments`);
     }
 
-    // Generate checkins
     const sampleCheckins: Checkin[] = [];
     const today = new Date();
 

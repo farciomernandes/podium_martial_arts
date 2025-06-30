@@ -12,14 +12,14 @@ export class IsClassDayUseCase {
 
   async execute(dto: IsClassDayDto): Promise<{ isClassDay: boolean }> {
     this.logger.log(
-      `Checking if ${dto.date} is a class day for modality ID: ${dto.modalityId}`,
+      `Checking if ${dto.date} is a class day for modality ID: ${dto.modality_id}`,
     );
 
-    const schedules = await this.modalityScheduleRepository.findByModalityId(
-      dto.modalityId,
+    const schedules = await this.modalityScheduleRepository.findBymodality_id(
+      dto.modality_id,
     );
     if (schedules.length === 0) {
-      this.logger.warn(`No schedules found for modality ID: ${dto.modalityId}`);
+      this.logger.warn(`No schedules found for modality ID: ${dto.modality_id}`);
       return { isClassDay: false };
     }
 
@@ -30,7 +30,7 @@ export class IsClassDayUseCase {
       (schedule) => schedule.day_of_week === day_of_week,
     );
     this.logger.log(
-      `Date ${dto.date} is${isClassDay ? '' : ' not'} a class day for modality ID: ${dto.modalityId}`,
+      `Date ${dto.date} is${isClassDay ? '' : ' not'} a class day for modality ID: ${dto.modality_id}`,
     );
 
     return { isClassDay };

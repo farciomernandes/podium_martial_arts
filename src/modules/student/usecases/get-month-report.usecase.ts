@@ -20,9 +20,9 @@ export class GetMonthlyReportUseCase {
     const students = await this.studentRepository.find();
 
     const payment_status = {
-      paid: payments.filter((p) => p.status === 'Pago').length,
-      pending: payments.filter((p) => p.status === 'Pendente').length,
-      late: payments.filter((p) => p.status === 'Atrasado').length,
+      paid: payments.filter((p) => p.status === 'Paid').length,
+      pending: payments.filter((p) => p.status === 'Pending').length,
+      late: payments.filter((p) => p.status === 'Overdue').length,
     };
 
     const revenueExpected = students.reduce(
@@ -30,7 +30,7 @@ export class GetMonthlyReportUseCase {
       0,
     );
     const revenueReceived = payments
-      .filter((p) => p.status === 'Pago')
+      .filter((p) => p.status === 'Paid')
       .reduce((sum, payment) => sum + payment.value, 0);
 
     const report: MonthlyReportDto = {

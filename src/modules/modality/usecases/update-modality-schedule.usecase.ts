@@ -27,12 +27,12 @@ export class UpdateModalityScheduleUseCase {
       throw new NotFoundException('Modality schedule not found');
     }
 
-    if (dto.modalityId) {
+    if (dto.modality_id) {
       const modality = await this.modalityRepository.findOne({
-        where: { id: dto.modalityId },
+        where: { id: dto.modality_id },
       });
       if (!modality) {
-        this.logger.warn(`Modality not found: ${dto.modalityId}`);
+        this.logger.warn(`Modality not found: ${dto.modality_id}`);
         throw new NotFoundException('Modality not found');
       }
     }

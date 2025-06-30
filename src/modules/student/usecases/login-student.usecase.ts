@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { StudentLoginDto } from '@modules/student/dtos/student-login.dto';
 import { StudentRepository } from '@infra/typeorm/repositories/student.repository';
 import { LoginResponseDto } from '../dtos/student.types';
-import * as bcrypt from 'bcrypt';
+import { BcryptHashUtils } from '@infra/utils/bcrypt-hash.utils';
 
 @Injectable()
 export class LoginStudentUseCase {
@@ -22,7 +22,7 @@ export class LoginStudentUseCase {
       return { success: false, message: 'Student não encontrado' };
     }
 
-    const isPasswordValid = await bcrypt.compare(
+    const isPasswordValid = await BcryptHashUtils.verifyOldPassword(
       credentials.password,
       student.password,
     );

@@ -1,9 +1,9 @@
 import { Controller, Post, Body, Get, Param, HttpStatus, HttpCode, Query } from '@nestjs/common';
 import { ApiBody, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { RecordCheckinDto } from './dtos/record-checkin.dto';
 import { Checkin } from './entities/checkin.entity';
 import { CheckinReportDto, ReportDto } from './dtos/report.dto';
 import { CheckinProvider } from './providers/checkin.provider';
+import { CheckinResponseDto } from './dtos/record-checkin.dto';
 
 @ApiTags('Checkin')
 @Controller('checkins')
@@ -12,10 +12,10 @@ export class CheckinController {
 
   @Post()
   @ApiOperation({ summary: 'Record a checkin' })
-  @ApiBody({ type: RecordCheckinDto, description: 'Checkin data' })
+  @ApiBody({ type: CheckinResponseDto, description: 'Checkin data' })
   @ApiOkResponse({ description: 'Recorded checkin', type: Checkin })
   @HttpCode(HttpStatus.OK)
-  async recordCheckin(@Body() dto: RecordCheckinDto): Promise<Checkin> {
+  async recordCheckin(@Body() dto: CheckinResponseDto): Promise<Checkin> {
     return this.checkinProvider.recordCheckin(dto);
   }
 

@@ -79,6 +79,5 @@ export abstract class Setups {
 
   static async startDependencies(): Promise<void> {
     this.app.enableShutdownHooks();
-    // this.app.useGlobalInterceptors(new NewrelicInterceptor());
   }
 }
